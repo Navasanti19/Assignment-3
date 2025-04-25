@@ -1,0 +1,28 @@
+body {
+    background-color: #f8f9fa;
+  }
+  
+  h1 {
+    font-weight: 600;
+    color: #343a40;
+  }
+  
+  .card img {
+    max-height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .card {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .gallery {
+    margin-top: 40px;
+  }
+  
