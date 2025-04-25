@@ -40,68 +40,73 @@
   <script src="lib/CryptoJS/components/enc-base64.js"></script>
   <script src="lib/url-template/url-template.js"></script>
   <script src="lib/apiGateway.core/apiGatewayClient.js"></script>
-
-
-  <script src="apigClient.js"></script> <!-- tu apigClient.js renombrado -->
+  <script src="apigClient.js"></script>
 
   <script>
-    console.log("apiGateway:", window.apiGateway);
-    console.log("apiGateway.core:", window.apiGateway?.core);
-    console.log("apiGatewayClientFactory:", window.apiGateway?.core?.apiGatewayClientFactory);
+    window.onload = function () {
+      console.log("apiGateway:", window.apiGateway);
+      console.log("apiGateway.core:", window.apiGateway?.core);
+      console.log("apiGatewayClientFactory:", window.apiGateway?.core?.apiGatewayClientFactory);
 
-    const apigClient = apigClientFactory.newClient();
+      const apigClient = apigClientFactory.newClient();
+      window.apigClient = apigClient;
 
-    function searchPhotos() {
-      const query = document.getElementById('searchText').value;
-      apigClient.searchGet({ q: query }, {}, {}).then(res => {
-        const urls = res.data.split('\n').filter(Boolean);
-        const gallery = document.getElementById('results');
-        gallery.innerHTML = '';
-        urls.forEach(url => {
-          const col = document.createElement('div');
-          col.className = 'col-md-4 col-lg-3';
-          col.innerHTML = `
-            <div class="card shadow-sm">
-              <img src="${url}" class="card-img-top" />
-              <div class="card-body p-2">
-                <small class="text-muted">${url.split('/').pop()}</small>
-              </div>
-            </div>`;
-          gallery.appendChild(col);
+      function searchPhotos() {
+        const query = document.getElementById('searchText').value;
+        apigClient.searchGet({ q: query }, {}, {}).then(res => {
+          const urls = res.data.split('\n').filter(Boolean);
+          const gallery = document.getElementById('results');
+          gallery.innerHTML = '';
+          urls.forEach(url => {
+            const col = document.createElement('div');
+            col.className = 'col-md-4 col-lg-3';
+            col.innerHTML = `
+              <div class="card shadow-sm">
+                <img src="${url}" class="card-img-top" />
+                <div class="card-body p-2">
+                  <small class="text-muted">${url.split('/').pop()}</small>
+                </div>
+              </div>`;
+            gallery.appendChild(col);
+          });
         });
-      });
-    }
+      }
 
-    function uploadPhoto() {
-      const fileInput = document.getElementById('photoInput');
-      const labels = document.getElementById('customLabels').value;
-      const file = fileInput.files[0];
-      if (!file) return alert("Please select a photo");
+      function uploadPhoto() {
+        const fileInput = document.getElementById('photoInput');
+        const labels = document.getElementById('customLabels').value;
+        const file = fileInput.files[0];
+        if (!file) return alert("Please select a photo");
 
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const arrayBuffer = e.target.result;
-        fetch(`https://usjcsd23me.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': file.type,
-            'x-amz-meta-customLabels': labels
-          },
-          body: arrayBuffer
-        })
-        .then(res => {
-          if (res.ok) {
-            alert("Upload successful!");
-            document.getElementById('photoInput').value = '';
-            document.getElementById('customLabels').value = '';
-          } else {
-            throw new Error("Upload failed");
-          }
-        })
-        .catch(err => alert(err.message));
-      };
-      reader.readAsArrayBuffer(file);
-    }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const arrayBuffer = e.target.result;
+          fetch(`https://usjcsd23me.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': file.type,
+              'x-amz-meta-customLabels': labels
+            },
+            body: arrayBuffer
+          })
+          .then(res => {
+            if (res.ok) {
+              alert("Upload successful!");
+              document.getElementById('photoInput').value = '';
+              document.getElementById('customLabels').value = '';
+            } else {
+              throw new Error("Upload failed");
+            }
+          })
+          .catch(err => alert(err.message));
+        };
+        reader.readAsArrayBuffer(file);
+      }
+
+      // Hacemos visibles las funciones para los botones
+      window.searchPhotos = searchPhotos;
+      window.uploadPhoto = uploadPhoto;
+    };
   </script>
 </body>
 </html>
