@@ -75,23 +75,25 @@
 					// FUNCIONES
 					window.searchPhotos = function () {
 						const query = document.getElementById("searchText").value;
-						apigClient.searchGet({ q: query }, {}, {}).then((res) => {
-							const urls = res.data.split("\n").filter(Boolean);
-							const gallery = document.getElementById("results");
-							gallery.innerHTML = "";
-							urls.forEach((url) => {
-								const col = document.createElement("div");
-								col.className = "col-md-4 col-lg-3";
-								col.innerHTML = `
+						apigClient
+							.searchGet({ q: query }, { mode: "cors" }, {})
+							.then((res) => {
+								const urls = res.data.split("\n").filter(Boolean);
+								const gallery = document.getElementById("results");
+								gallery.innerHTML = "";
+								urls.forEach((url) => {
+									const col = document.createElement("div");
+									col.className = "col-md-4 col-lg-3";
+									col.innerHTML = `
                 <div class="card shadow-sm">
                   <img src="${url}" class="card-img-top" />
                   <div class="card-body p-2">
                     <small class="text-muted">${url.split("/").pop()}</small>
                   </div>
                 </div>`;
-								gallery.appendChild(col);
+									gallery.appendChild(col);
+								});
 							});
-						});
 					};
 
 					window.uploadPhoto = function () {
@@ -109,6 +111,7 @@
 								)}`,
 								{
 									method: "PUT",
+									mode: "cors",
 									headers: {
 										"Content-Type": file.type,
 										"x-amz-meta-customLabels": labels,
