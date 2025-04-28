@@ -1,0 +1,72 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Stack for two Lambdas, API Gateway, and two S3 buckets (frontend and storage)'
+
+Resources:
+  StorageBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: storage-bucket-myproject-001
+
+  FrontendBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: frontend-bucket-myproject-001
+      WebsiteConfiguration:
+        IndexDocument: index.html
+
+  Lambda1Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: Lambda1Function
+      Handler: index.lambda_handler
+      Runtime: python3.11
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              return {
+                  "statusCode": 200,
+                  "body": "Hello from Lambda 1"
+              }
+
+  Lambda2Function:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: Lambda2Function
+      Handler: index.lambda_handler
+      Runtime: python3.11
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Code:
+        ZipFile: |
+          def lambda_handler(event, context):
+              return {
+                  "statusCode": 200,
+                  "body": "Hello from Lambda 2"
+              }
+
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: LambdaBasicExecutionRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - lambda.amazonaws.com
+            Action: 
+              - sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: SimpleApi
+      Description: Simple API Gateway for the two Lambdas
+
+Outputs:
+  FrontendBucketWebsiteURL:
+    Description: URL to access the frontend bucket
+    Value: !GetAtt FrontendBucket.WebsiteURL
