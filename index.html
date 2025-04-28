@@ -103,7 +103,7 @@
               'Content-Type': 'application/octet-stream',
               'x-amz-meta-customLabels': labels
             },
-            body: arrayBuffer
+            body: file
           })
           .then(res => {
             if (res.ok) {
