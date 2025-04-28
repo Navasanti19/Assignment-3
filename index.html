@@ -29,10 +29,10 @@
     </div>
 
     <!-- 🖼️ Results -->
-    <div id="results" class="gallery row g-3"></div>
+    <div id="results" class="gallery row g-3 text-center"></div>
   </div>
 
-  <!-- 🚀 Solo JavaScript puro -->
+  <!-- 🚀 JavaScript -->
   <script>
     window.onload = function () {
 
@@ -55,6 +55,16 @@
         .then(urls => {
           const gallery = document.getElementById('results');
           gallery.innerHTML = '';
+
+          if (!Array.isArray(urls) || urls.length === 0) {
+            gallery.innerHTML = `
+              <div class="alert alert-warning w-100" role="alert">
+                <h4 class="alert-heading">No photos found 📷</h4>
+                <p>Try searching with a different keyword!</p>
+              </div>
+            `;
+            return;
+          }
 
           urls.forEach(url => {
             const col = document.createElement('div');
