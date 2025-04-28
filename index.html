@@ -97,7 +97,6 @@
         const reader = new FileReader();
         reader.onload = function (e) {
           const arrayBuffer = e.target.result;
-          const binaryArray = new Uint8Array(arrayBuffer);
           fetch(`https://7kq7rvah59.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
             headers: {
