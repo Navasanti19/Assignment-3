@@ -94,27 +94,33 @@
           return alert("Please select a photo");
         }
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("x-amz-meta-customLabels", labels);
-
-        fetch(`https://qnv872rqre.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
-          method: 'PUT',
-          body: formData
-        })
-        .then(res => {
-          if (res.ok) {
-            alert("Upload successful!");
-            document.getElementById('photoInput').value = '';
-            document.getElementById('customLabels').value = '';
-          } else {
-            throw new Error("Upload failed");
-          }
-        })
-        .catch(err => alert(err.message));
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const arrayBuffer = e.target.result;
+          fetch(`https://qnv872rqre.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
+            method: 'PUT',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/octet-stream',
+              'x-amz-meta-customLabels': labels
+            },
+            body: arrayBuffer
+          })
+          .then(res => {
+            if (res.ok) {
+              alert("Upload successful!");
+              document.getElementById('photoInput').value = '';
+              document.getElementById('customLabels').value = '';
+            } else {
+              throw new Error("Upload failed");
+            }
+          })
+          .catch(err => alert(err.message));
+        };
+        reader.readAsArrayBuffer(file);
       };
-    };
 
+    };
   </script>
 </body>
 </html>
