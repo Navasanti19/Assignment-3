@@ -87,7 +87,7 @@
         const reader = new FileReader();
         reader.onload = function (e) {
           const arrayBuffer = e.target.result;
-          fetch(`https://usjcsd23me.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
+          fetch(`https://ldjhn91b75.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/octet-stream',
