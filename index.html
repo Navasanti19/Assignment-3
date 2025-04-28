@@ -99,8 +99,9 @@
           const arrayBuffer = e.target.result;
           fetch(`https://ldjhn91b75.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
+            mode: 'cors',
             headers: {
-              'Content-Type': 'application/octet-stream',
+              'Content-Type': file.type,
               'x-amz-meta-customLabels': labels
             },
             body: arrayBuffer
