@@ -90,7 +90,7 @@
           fetch(`https://usjcsd23me.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
             headers: {
-              'Content-Type': file.type,
+              'Content-Type': 'application/octet-stream',
               'x-amz-meta-customlabels': labels
             },
             body: arrayBuffer
