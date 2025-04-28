@@ -94,10 +94,7 @@
           return alert("Please select a photo");
         }
 
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const arrayBuffer = e.target.result;
-          fetch(`https://qnv872rqre.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
+        fetch(`https://qnv872rqre.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/octet-stream',
@@ -116,10 +113,8 @@
           })
           .catch(err => alert(err.message));
         };
-        reader.readAsArrayBuffer(file);
       };
 
-    };
   </script>
 </body>
 </html>
