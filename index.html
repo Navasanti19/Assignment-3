@@ -99,7 +99,7 @@
           const arrayBuffer = e.target.result;
           fetch(`https://qnv872rqre.execute-api.us-east-1.amazonaws.com/prod/photos?object=${encodeURIComponent(file.name)}`, {
             method: 'PUT',
-            mode: 'no-cors',
+            mode: 'cors',
             headers: {
               'Content-Type': file.type,
               'x-amz-meta-customLabels': labels
